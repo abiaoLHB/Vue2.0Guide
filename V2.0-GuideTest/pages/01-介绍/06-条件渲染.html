@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <script src="../../js/vue.js"></script>
+    </head>
+    <body style="padding-left:300px;">
+      <div id="app1">
+        <span v-if='ok'>span ok=true</span>
+        <span v-else>span ok=false</span>
+
+
+        <div v-if="type === 'A'">
+          A
+        </div>
+        <div v-else-if="type === 'B'">
+          B
+        </div>
+        <div v-else-if="type === 'C'">
+          C
+        </div>
+        <div v-else>
+          Not A/B/C
+        </div>
+
+
+        <!-- 用key管理可复用的元素 -->
+        <div v-if="loginType === 'username'">
+          <label>Username</label>
+          <input placeholder="Enter your username" />
+        </div>
+        <div v-else>
+          <label>Email</label>
+          <input placeholder="Enter email address" />
+        </div>
+        <button @click='changeLoginType'>
+          Toggle login type
+        </button>
+
+
+
+
+
+      </div>
+
+
+      <script>
+        var vm1 = new Vue({
+          el:'#app1',
+          data:{
+            ok:false,
+            type:'B',
+            loginType:'username'
+          },
+          methods:{
+            changeLoginType:function () {
+                return this.loginType = this.loginType === 'username' ? 'email' : 'username'
+            }
+          }
+        })
+
+
+      </script>
+
+    </body>
+</html>
