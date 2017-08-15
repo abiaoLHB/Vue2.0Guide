@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <script src="../../js/vue.js"></script>
+
+    </head>
+    <body style="padding-left:300px;">
+      <div  id="app1">
+          <ul>
+            <li v-for='(item,index) in items'>
+              {{item.message}}+{{index}}+{{parentMessage}}
+              <!-- 在 v-for 块中，我们拥有对父作用域属性的完全访问权限 -->
+            </li>
+          </ul>
+
+          <!-- 也可以使用v-for of -->
+          <ul>
+            <li v-for='item of items'>{{item.message}}</li>
+          </ul>
+
+          <!-- 你也可以用带有 v-for 的 <template> 标签来渲染多个元素块 -->
+          <ul>
+            <div v-for="item in items">
+              <li>{{item.message}}</li>
+              <li><span>divider</span></li>
+            </div>
+          </ul>
+
+          <!-- v-for迭代对象 -->
+          <!-- 在遍历对象时，是按 Object.keys() 的结果遍历，但是不能保证它的结果在不同的 JavaScript 引擎下是一致的 -->
+          <ul>
+            <li v-for='(value,key,index) in object'>{{value}}:{{key}}:{{index}}</li>
+          </ul>
+
+
+          <!-- 整数迭代 v-for 也可以取整数。在这种情况下，它将重复多次模板-->
+          <div>
+            <span v-for='n in 10'>{{n}}</span>
+          </div>
+
+          <!-- todo list -->
+          <div id="todo-list-example">
+            <input
+              v-model="newTodoText"
+              v-on:keyup.enter="addNewTodo"
+              placeholder="Add a todo"
+            >
+            <ul>
+              <li
+                is="todo-item"
+                v-for="(todo, index) in todos"
+                v-bind:key="todo.id"
+                v-bind:title="todo.title"
+                v-on:remove="todos.splice(index, 1)"
+              ></li>
+            </ul>
+          </div>
+
+
+        <!-- 数组更新检测  变异方法 文档说会出发试图更新，但测试没有出发试图更新-->
+        <div id="app3">
+          <ul>
+            <li v-for='(item,index) in items'>{{item}}</li>
+          </ul>
+
+        </div>
+
+      <!-- 显示过滤/排序结果 -->
+      <div id="app4">
+        <ul>
+        <!-- 使用计算属性 -->
+          <li v-for='n in evenNumbers'>{{n}}</li>
+        </ul>
+
+        <!-- 计算属性不适用的情况下，使用methods -->
+        <ul>
+          <li v-for='item in even(numbers)'>{{item}}</li>
+        </ul>
+      </div>
+
+
+
+
+
+
+          <div style='height: 500px'></div>
+      </div>
+
+      <script>
+          var vm4 = new Vue({
+            el:'#app4',
+            data:{
+              numbers:[
+                1,2,3,4,5
+              ]
+            },
+            computed:{
+              evenNumbers:function () {
+                return this.numbers.filter(function (number) {
+                  return number % 2 === 0
+                })
+              }
+            },
+            methods:{
+              even:function (numbers) {
+                  return numbers.filter(function (number) {
+                      return number % 2  !== 0;
+                  })
+              }
+            }
+          })  
+
+          var vm3 = new Vue({
+            el:'#app3',
+            data:{
+              items:[
+                '1',
+                '2',
+                '3',
+                '4'
+              ]
+            }
+          })
+
+
+
+
+
+
+
+
+
+
+      Vue.component('todo-item', {
+  template: '\
+    <li>\
+      {{ title }}\
+      <button v-on:click="$emit(\'remove\')">X</button>\
+    </li>\
+  ',
+  props: ['title']
+})
+new Vue({
+  el: '#todo-list-example',
+  data: {
+    newTodoText: '',
+    todos: [
+      {
+        id: 1,
+        title: 'Do the dishes',
+      },
+      {
+        id: 2,
+        title: 'Take out the trash',
+      },
+      {
+        id: 3,
+        title: 'Mow the lawn'
+      }
+    ],
+    nextTodoId: 4
+  },
+  methods: {
+    addNewTodo: function () {
+      this.todos.push({
+        id: this.nextTodoId++,
+        title: this.newTodoText
+      })
+      this.newTodoText = ''
+    }
+  }
+})
+
+          var vm1 = new Vue({
+            el:'#app1',
+            data:{
+              items:[
+                {message:'hello0'},
+                {message:'hello1'},
+                {message:'hello2'},
+                {message:'hello3'},
+                {message:'hello4'},
+                {message:'hello5'},
+              ],
+              parentMessage:'父作用域',
+              object:{
+                name:'luohongbiao',
+                age:'29',
+                address:'shandng',
+                wife:['1','2'],
+                house:{
+                  name:'楼房',
+                  floot:'16层'
+                }
+              }
+            }
+          })
+
+
+      </script>
+
+    </body>
+</html>
