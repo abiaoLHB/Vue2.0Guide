@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <script src="../../js/vue.js"></script>
+    </head>
+    <body style="padding-left:300px;">
+    <div id="app1">
+      <p>Original message=>{{message}}</p>
+      <p>Couputed reversond message=>{{reversondMessge}}</p>
+      <!-- 除了计算属性以为，完全可以用method实现，不同的是计算属性可以缓存 -->
+      <p>Reversed message with methods=>{{reversedMessage()}}</p>
+
+    </div>
+     <p>计算属性和watch</p>
+
+    <div id="app2">
+       <p>{{fullName}}</p>
+        <p>{{fullName}}</p>
+        <p>{{myName}}</p>
+    </div>
+
+
+  <!-- 使用watch执行异步操作（访问一个api），计算属性无法操作 -->
+  <div id="app3">
+    <p>
+      Ask a yew/no question:
+      <input v-model='question' />
+    </p>
+    <p>{{answer}}</p>
+  </div>
+
+<script src="https://unpkg.com/axios@0.12.0/dist/axios.min.js"></script>
+<script src="https://unpkg.com/lodash@4.13.1/lodash.min.js"></script>
+<script>
+var vm3 = new Vue({
+  el:"#app3",
+  data:{
+    question:'',
+    answer:'I cannot give you an answer until you ask a question!'
+  },
+  watch:{
+    question:function(){//观察watch，question一变，立马执行这个函数
+        this.answer = 'Waiting for you to stop typing...'
+        this.getAnswer();
+    }
+  },
+  methods:{
+    getAnswer:_.debounce(function(){
+      // indexOf() 方法可返回某个指定的字符串值在字符串中首次出现的位置,indexOf() 方法对大小写敏感！
+      // 如果要检索的字符串值没有出现，则该方法返回 -1
+      if(this.question.indexOf('?') === -1){
+        this.answer = 'Questions usually contain a question mark. ;-----)';
+        return;
+      }
+      // 相当于中间状态
+      this.answer = "Thinking..."
+      var vm = this;
+
+      axios.get('https://yesno.wtf/api')
+          .then(function (response) {
+            vm.answer = _.capitalize(response.data.answer)
+          })
+          .catch(function (error) {
+            vm.answer = 'Error! Could not reach the API. ' + error
+          })
+
+      // 这是我们为用户停止输入等待的毫秒数
+    },500)
+  }
+});
+
+
+   var  vm2 = new Vue({
+      el:"#app2",
+      data:{
+        firstName:'Foo',
+        lastName:"Bar"
+      },
+      watch:{// 观察方法，就是你要观察哪个属性？观察谁谁变了就会执行对应的方法.并且把观察的属性值传过来
+        firstName:function(val) {
+            // alert(val)
+            this.fullName = val+''+this.lastName
+        },
+        lastName:function (val) {
+          this.fullName = this.firstName + '' + val;
+        }
+      },
+      computed: {
+        // 计算属性默认只有getter，也就是获取数据的方法，return。
+         fullName:function(){
+           return this.firstName +''+ this.lastName;
+         },
+         //当然，在你需要的时候也可以自己写setter
+        myName:{
+          get:function(){
+            return this.firstName + '' + this.lastName;
+          },
+          set:function(newValue){
+              var names = newValue.split('');
+              this.firstName = names[0];
+              this.lastName = names[names.length-1]
+          }
+        }
+
+      }
+   });
+
+   var vm1 = new Vue({
+      el:"#app1",
+      data:{
+          message:"hello"
+      },
+      methods:{
+        reversedMessage:function () {
+          return this.message.split('').reverse().join('')
+        }
+      },
+
+      computed:{
+          reversondMessge:function () {
+            return this.message.split('').reverse().join('');
+          }
+      }
+   });
+
+
+</script>
+    </body>
+</html>

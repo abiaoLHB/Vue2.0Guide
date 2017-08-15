@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>介绍</title>
+	<script src="../../js/vue.js"></script>
+</head>
+<body>
+  <!-- 写在app里面可以 -->
+	<div id="app">
+     {{message}}
+    <div>
+      {{message}}
+    </div>
+  </div>
+  <!-- 写在外面不行 -->
+  <div class="pp" title="不能写在外面">
+    {{message}}
+  </div>
+
+  <div id="app2">
+  <!-- 指令带有v-
+  这里该指令的作用是：“将这个元素节点的 title 属性和 Vue 实例的 message 属性保持一致”。
+  -->
+    <span v-bind:title="message">
+        鼠标悬停几秒钟查看此处动态绑定的提示信息！
+    </span>
+  </div>
+
+  <!-- v-if -->
+  <div id="app3">
+    <div v-if="seen">
+      <div>能看到我了</div>
+    </div>
+  </div>
+
+  <!-- v-for -->
+  <div id="app4">
+    <ol>
+      <li v-for="todo in todos">
+        {{todo.text}}
+      </li>
+    </ol>
+  </div>
+
+<!-- v-on:click -->
+<div id="app5">
+  <p>{{message}}</p>
+  <button v-on:click="reverseMessage">翻转消息</button>
+</div>
+
+<!-- v-model -->
+<div id="app6">
+  <p>{{message}}</p>
+  <!-- 把input的值绑定到message属性上 -->
+  <input v-model="message" />
+</div>
+
+<!-- 模板 -->
+<div id="app7">
+  <ol>
+    <!-- 现在我们为每个todo-item提供待办项对象    -->
+    <!-- 待办项对象是变量，即其内容可以是动态的 -->
+    <!-- 指令带有v-
+    这里该指令的作用是：“将这个元素节点的 todo 属性和 Vue 实例的 item 属性保持一致”。
+    -->
+    <todo-item v-for="item in groceryList" v-bind:todo="item"></todo-item>
+
+  </ol>
+</div>
+
+<!-- 传参数 -->
+<div id="app8">
+  <luoli v-for="todo in list" v-bind:item="todo"></luoli>
+</div>
+
+<!-- 接受参数 -->
+<div id="app9">
+  <zidingyili v-for="item in prolist" v-bind:todo="item">s
+      <zuojian2 v-bind:pram="item"></zuojian2>
+  </zidingyili>
+</div>
+
+
+<!-- 自定义组件 传参练习 -->
+<div id="app10">
+  <constom v-for="item in shuju" v-bind:canshu="item"></constom>
+  <button v-on:click="eat">吃饭</button>
+  <div v-if="hidden">显示</div>
+  <span style="display:block">{{inputmessage}}</span>
+  <input v-model="inputmessage" />
+</div>
+
+
+
+  <script>
+  Vue.component("constom",{
+    props:["canshu"],
+    template:"<div>{{canshu.chengji}}</div>"
+  })
+
+ var app10=new Vue({
+  el:"#app10",
+  data:{
+    shuju:[
+      {chengji:95},
+      {chengji:95},
+      {chengji:95},
+      {chengji:95}
+    ],
+    hidden:true,
+    inputmessage:"请输入姓名"
+  },
+  methods:{
+    eat:function () {
+      console.log("吃东西")
+    }
+  }
+ })
+
+
+
+Vue.component("zidingyili",{
+  props:["todo"],
+  template:"<div>{{todo.text}}</div>"
+});
+Vue.component("zuojian2",{
+  props:["pram"],
+  template:"<p>{{pram.text}}</p>"
+})
+
+var app9 = new Vue({
+    el:"#app9",
+    data:{
+      message:"i'm message",
+      prolist:[
+          {text:"eatlanch"},
+          {text:"eatdanner"},
+          {text:"eatwancan"}
+        ],
+      pramcontent:{
+        text:"中和黄埔高峰论坛"
+      }
+    }
+})
+
+
+
+// 子组件通过props来接受参数2
+  Vue.component("luoli",{
+    props:['item'],
+    template:"<li>{{item.text}}</li>"
+  })
+
+  var app8 = new Vue({
+      el:"#app8",
+      data:{
+        list:[
+          {text:"java"},
+          {text:"iOS"},
+          {text:"WPhone"}
+        ]
+      }
+  })
+
+    var app = new Vue({
+      el:"#app",
+      data:{
+        message:"声明式渲染!0000"
+      }
+    })
+
+    var app2 = new Vue({
+      el:"#app2",
+      data:{
+        message:"页面加载与"+new Date()
+      }
+    })
+
+    var app3 = new Vue({
+      el:"#app3",
+      data:{
+        seen:true
+      }
+    })
+
+    var app4 = new Vue({
+      el:"#app4",
+      data:{
+        todos:[
+          {text:"JavaScript"},
+          {text:"Vue"},
+          {text:"Node"}
+        ]
+      }
+    })
+
+    var app5 = new Vue({
+      el:"#app5",
+      data:{
+        message:"hello,vue js"
+      },
+      methods:{
+        reverseMessage:function () {
+          //更改了数据，但是没有触碰dom。所有的dom操作都有vue处理
+          this.message = this.message.split('').reverse().join("")
+        }
+      }
+    })
+
+    var app6 = new Vue({
+      el:"#app6",
+      data:{
+        message:"hello ,dog!"
+      }
+    })
+
+    Vue.component('todo-item', {
+      props: ['todo'],
+      template: '<li>{{ todo.text }}</li>'
+    })
+    var app7 = new Vue({
+      el: '#app7',
+      data: {
+        groceryList: [
+          { text: '蔬菜' },
+          { text: '奶酪' },
+          { text: '随便其他什么人吃的东西' }
+        ]
+      }
+    })
+
+
+  </script>
+</body>
+</html>

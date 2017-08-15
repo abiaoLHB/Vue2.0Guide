@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <script src="../../js/vue.js"></script>
+        <style>
+            .text-danger{
+              color: red;
+            }
+            .box1{
+              width: 10px;
+              height: 10px;
+              background-color: pink;
+            }
+            .isactiveClass{
+              font-size: 10px;
+              color:blue;
+              width: 50px;
+              height: 50px;
+            }
+            .luo{
+              color:yellow
+            }
+            .baseStyle{
+              color:yellow;
+            }
+            .overStyle{
+              background:red;
+            }
+        </style>
+    </head>
+    <body style="padding-left:300px;">
+    <!-- 在 v-bind 用于 class 和 style 时， Vue.js 专门增强了它。表达式的结果类型除了字符串之外，还可以是对象或数组。 -->
+    <div id="app1">
+      <!-- 我们可以传给 v-bind:class 一个对象，以动态地切换 class 。 -->
+      <!-- 上面的语法表示 class active 的更新将取决于数据属性 isActive 是否为真值 。 -->
+      <div v-bind:class="{active:isActive}">
+        我的class取决于isActive
+      </div>
+
+      <!-- 我们也可以在对象中传入更多属性用来动态切换多个 class 。此外， v-bind:class 指令可以与普通的 class 属性共存 -->
+      <div class="static" v-bind:class="{active:isActive,'text-danger':hasError}">
+          <!-- 更多属性动态切换class，并且可以和普通的calss共存 -->
+          更多属性动态切换class，并且可以和普通的calss共存
+      </div>
+
+      <!-- 直接绑定一个对象 -->
+      <div v-bind:class="classObjcet" class="box"></div>
+
+      <!-- 也可以绑定返回对象的计算属性 -->
+      <div v-bind:class="computedObject">
+        也可以绑定返回对象的计算属性
+      </div>
+    </div>
+
+    <!-- 数组语法 -->
+    <div id="app2">
+        <div v-bind:class="[activeClass,errorClass]">
+          数组语法
+        </div>
+       <!-- 在数组语法中使用三元表达式 -->
+       <!-- 此例始终添加 errorClass ，但是只有在 isActive 是 true 时添加 activeClass 。 -->
+       <div v-bind:class="[isActive ? isactiveClass : unActiveClass,errorClass]">
+         黄埔
+       </div>
+      <!-- 数组语法和对象语法混合 -->
+      <!-- 绑定对象的时候，后面的值是数据属性，前面的类名 -->
+      <div v-bind:class='[{luo:isluo},errorClass]'>heh</div>
+    </div>
+
+    <!-- 绑定内联样式 -->
+    <div id="app3">
+      <!-- 对象语法 -->
+      <div v-bind:style="{color:activeColor,fontSize:activeSize+'px'}">绑定内联样式</div>
+      <!-- 直接绑定一个样式对象 -->
+      <div v-bind:style='styleObject'>直接绑定一个样式对象</div>
+      <!-- 数组语法 -->
+      <div v-bind:style='[baseStyle,overStyle]'>baseStyle</div>
+    </div>
+
+    <script>
+      var vm3 = new Vue({
+        el:"#app3",
+        data:{
+          activeColor:'#0000ff',
+          activeSize:12,
+          styleObject:{
+            color:'#044583',
+            fontSize:'13px',
+            background:'pink'
+          },
+          baseStyle:{
+            color:'red'
+          },
+          overStyle:{
+            fontSize:'20px'
+          }
+        }
+      })
+      var vm2 = new Vue({
+        el:"#app2",
+        data:{
+          activeClass : 'active',
+          errorClass : 'text-danger',
+          isactiveClass : 'isactiveClass',
+          unActiveClass: 'unActiveClass',
+          // luo:'luo',
+          isluo:true,
+          isActive:true
+        },
+      })
+      var vm1 = new Vue({
+        el:'#app1',
+        data:{
+          isActive:true,
+          hasError:true,
+          classObjcet:{
+            box1:true,
+            box2:false,
+            box3:true
+          }
+        },
+        computed:{
+          computedObject:function () {
+            return{
+                active:this.isActive && !this.error,
+                'text-danger':this.error && this.error.type=='fatal'
+            }
+          }
+        }
+      });
+
+    </script>
+
+    </body>
+</html>

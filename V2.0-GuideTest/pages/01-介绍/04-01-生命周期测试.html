@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <script src="../../js/vue.js"></script>
+    </head>
+    <body style="padding-left:300px;">
+
+      <div id="app1">
+        <p>
+          {{message}}
+        </p>
+        <button @click='first'>谈一下</button>
+      </div>
+
+      <script>
+        var vm1 = new Vue({
+          el:'#app1',
+          data:{
+            message:'vue'
+          },
+          methods:{
+            first:function () {
+                alert('呵呵')
+            }
+          },
+          //生命周期
+          beforeCreate:function () {
+            console.log('1、beforeCreate-在实例初始化之后，数据观测和event/watcher时间配置之前被调用。')
+          },
+          created:function () {
+            console.log('2、created--实例已经创建完成之后被调用。在这一步，实例已经完成以下的配置：数据观测，属性和方法的运算，watch/event事件回调。然而，挂载阶段还没开始，$el属性目前不可见。')
+          },
+          beforeMount:function () {
+            console.log('3、beforeMount---在挂载开始之前被调用：相关的render函数首次被调用。该钩子在服务器端渲染期间不被调用。')
+          },
+          mounted:function () {
+            console.log("4、el被新创建的vm.$el替换，并挂在到实例上去之后调用该钩子函数。如果root实例挂载了一个文档内元素，当mounted被调用时vm.$el也在文档内。")
+          },
+          beforeUpdate:function () {
+            console.log("5、数据更新时调用，发生在虚拟DOM重新渲染和打补丁之前。你可以在这个钩子中进一步第更改状态，这不会触发附加的重渲染过程。该钩子在服务端渲染期间不被调用。")
+          },
+          updated:function () {
+            console.log("6、由于数据更改导致的虚拟DOM重新渲染和打补丁，在这之后会调用该钩子。当这个钩子被调用时，组件DOM已经更新，所以你现在可以执行依赖于DOM的操作。然而在大多数情况下，你应该避免在此期间更改状态，因为这可能会导致更新无限循环。该钩子在服务端渲染期间不被调用。")
+          },
+          activated:function () {
+            console.log('7、keep-alive组件激活时调用。该钩子在服务器端渲染期间不被调用。')
+          },
+          deactivated:function () {
+            console.log('8、keep-alive组件停用时调用。该钩子在服务端渲染期间不被调用。')
+          },
+          beforeDestroy:function () {
+            console.log('9、【类似于React生命周期的componentWillUnmount】实例销毁之间调用。在这一步，实例仍然完全可用。该钩子在服务端渲染期间不被调用。')
+          },
+          destroyed:function () {
+            console.log('Vue实例销毁后调用。调用后，Vue实例指示的所有东西都会解绑定，所有的事件监听器会被移除，所有的子实例也会被销毁。该钩子在服务端渲染不会被调用。')
+          }
+
+        })
+
+
+      </script>
+    </body>
+</html>
