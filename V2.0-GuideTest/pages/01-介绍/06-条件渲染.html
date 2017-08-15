@@ -24,7 +24,7 @@
         </div>
 
 
-        <!-- 用key管理可复用的元素 -->
+        <!-- 未用key。复用元素。用key管理可复用的元素 -->
         <div v-if="loginType === 'username'">
           <label>Username</label>
           <input placeholder="Enter your username" />
@@ -37,8 +37,25 @@
           Toggle login type
         </button>
 
+      <!-- 用key。不服用添加了key的元素。复用元素。用key管理可复用的元素 -->
+        <div v-if="loginTypeKey === 'username'">
+          <label>Username</label>
+          <input placeholder="Enter your username" key='username-input'/>
+        </div>
+        <div v-else>
+          <label>Email</label>
+          <input placeholder="Enter email address" key='email-input'/>
+        </div>
+        <button @click='changeLoginTypeKey'>
+          Toggle login type and key
+        </button>
 
-
+        <!-- v-show -->
+            <!-- 带有 v-show 的元素始终会被渲染并保留在 DOM 中。v-show 是简单地切换元素的 CSS 属性 display.
+            注意， v-show 不支持 语法，也不支持 v-else。 -->
+        <div v-show='isShow'>
+          show
+        </div>
 
 
       </div>
@@ -50,11 +67,16 @@
           data:{
             ok:false,
             type:'B',
-            loginType:'username'
+            loginType:'username',
+            loginTypeKey:'username',
+            isShow:true
           },
           methods:{
             changeLoginType:function () {
                 return this.loginType = this.loginType === 'username' ? 'email' : 'username'
+            },
+            changeLoginTypeKey:function(){
+                return this.loginTypeKey = this.loginTypeKey === 'username' ? 'email' : 'username'
             }
           }
         })
