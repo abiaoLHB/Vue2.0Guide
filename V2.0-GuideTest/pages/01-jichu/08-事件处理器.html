@@ -25,6 +25,53 @@
         </button>
 
         <!-- 事件修饰符 -->
+        <!-- 阻止单击事件冒泡 -->
+        <a v-on:click.stop='doThis'></a>
+
+        <!-- 提交事件不再重载页面 -->
+        <form v-on:submit.prevent='onSubmit'></form>
+
+        <!-- 修饰符可以串联  -->
+        <a v-on:click.stop.prevent='doThat'></a>
+
+        <!-- 只有修饰符 -->
+        <form v-on:submit.prevent></form>
+
+        <!-- 添加事件侦听器时使用事件捕获模式 -->
+        <div v-on:click.capture='doThis'></div>
+
+        <!-- 只当事件在该元素本身（比如不是子元素）触发时触发回调 -->
+       <div v-bind:style='styleObject'>
+          <div v-bind:style='childStyleObject' v-on:click.self='dothat' style="width: 50px;height:50px;"></div>
+       </div>
+
+        <div>
+          <!-- 使用修饰符时，顺序很重要；相应的代码会以同样的顺序产生。因此，用 @click.prevent.self 会阻止所有的点击，而 @click.self.prevent 只会阻止元素上的点击。 -->
+        </div>
+
+        <!-- 键值修饰符 -->
+        <form action="">
+          <input v-on:keyup.13='submit' value='键值等于13时提交'/>
+        </form>
+        <!-- 别名 -->
+        <form action="">
+          <input v-on:keyup.enter='submit' value='键值等于enter时提交'/>
+        </form>
+      <!-- 缩写语法 -->
+        <form action="">
+          <input @keyup.enter='submit' value='@click键值等于enter时提交'/>
+        </form>
+
+        <!-- 修饰键 -->
+        <!-- Alt + C -->
+        <input @keyup.alt.67="clear">
+
+        <!-- Ctrl + Click -->
+        <div @click.ctrl="doSomething">Do something</div>
+
+
+
+
     </div>
 
     <script>
@@ -32,7 +79,15 @@
           el:'#app1',
           data:{
             counter :0,
-            name:'Vue.js'
+            name:'Vue.js',
+            styleObject:{
+              width:100,
+              height:100,
+              background:'pink'
+            },
+            childStyleObject:{
+              background:'yellow'
+            }
           },
           methods: {
             greet:function(event){
@@ -54,6 +109,15 @@
                   console.log(event)
                 }
               alert(message)
+            },
+            dothat:function(){
+              alert('哈哈')
+            },
+            clear:function(){
+              console.log('按下alt+c组合键时触发')
+            },
+            doSomething:function(){
+              console.log('ctrl+点击时触发')
             }
           }
         })
