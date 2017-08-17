@@ -6,12 +6,46 @@
         <link rel="stylesheet" href="../../css/common.css" />
     </head>
     <body >
+        <div id="app1">
+            <!-- 注意点：HTML 特性是不区分大小写的。所以，当使用的不是字符串模版，camelCased (驼峰式)  命名的 prop 需要转换为相对应的 kebab-case (短横线隔开式) 命名： -->
+            <my-component message='hello'></my-component>
+        </div>
 
-
-
+        <!-- 动态Props -->
+        <div id="app2">
+          <input v-model='message' />
+          <br />
+          <child-component v-bind:parentmessage='message'></child-component>
+        </div>
       <script>
+          // 注册组件
+          Vue.component('my-component',{
+             props:['message'],
+             template:'<div>{{message}}</div>'
+          });
+          // 创建跟实例
+          new Vue({
+            el:'#app1',
+            data:function () {
+              return{
 
+              }
+            }
+          })
 
+          //  动态Props
+          Vue.component('child-component',{
+            props:['parentmessage'],
+            template:'<span>{{parentmessage}}</span>'
+          })
+          new Vue({
+            el:"#app2",
+            data:function(){
+              return {
+                  message:'v-model'
+              }
+            }
+          })
 
       </script>
     </body>
