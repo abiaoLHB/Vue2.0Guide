@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+         <script src="../../js/vue.js"></script>
+    </head>
+    <body style="padding-left:300px;">
+      <div id='app1'>
+        <!-- v-model 会忽略所有表单元素的 value、checked、selected 特性的初始值。因为它会选择 Vue 实例数据来作为具体的值。你应该通过 JavaScript 在组件的 data 选项中声明初始值 -->
+        <!-- 你可以用 v-model 指令在表单控件元素上创建双向数据绑定 -->
+          <input v-model='message' placeholder="edit me" />
+          <p>Message is:{{message}}</p>
+
+          <!-- 多行文本 -->
+          <span>Multiline message is:</span>
+          <p style="white-space: pre-line">{{ message }}</p>
+          <br>
+          <textarea v-model="message" placeholder="add multiple lines"></textarea>
+
+          <!-- 单个勾选框 -->
+          <input type="checkbox" id='checkbox' v-model='checked' />
+          <label for="checkbox">{{checked}}</label>
+          <br />
+
+          <!-- 多个勾选框，绑定到同一个数组 -->
+          <!-- 把input的value值绑定到一个数组，当选中的时候，value自动就添加到数组了 -->
+          <input type="checkbox" id='jack' value="Jack-value" v-model='cheackNames'/>
+          <label for="jack">Jack</label>
+
+          <input type="checkbox" id='john' value="John-value" v-model='cheackNames'/>
+          <label for="john">John</label>
+
+          <input type="checkbox" id="mike" value="Mike-value" v-model="cheackNames">
+          <label for="mike">Mike</label>
+          <br>
+          <span>Cheacked names:{{cheackNames}}</span>
+          <br />
+
+          <!-- 单选按钮 -->
+          <input type="radio" id='one' value="One" v-model='picked'/>
+          <label for="one">One</label>
+
+          <input type="radio" id='two' value="Two" v-model='picked'/>
+          <label for="two">Two</label>
+          <br />
+          <span>Picked:{{picked}}</span>
+
+          <!-- 选择列表-单选 -->
+          <!-- 如果 v-model 表达初始的值不匹配任何的选项，<select> 元素就会以”未选中”的状态渲染。在 iOS 中，这会使用户无法选择第一个选项，因为这样的情况下，iOS 不会引发 change 事件。因此，像以上提供 disabled 选项是建议的做法 -->
+          <select v-model='SelectedValueis'>
+            <option value="" disabled>请选择</option>
+            <option>A</option>
+            <option>B</option>
+            <option>C</option>
+          </select>
+          <span>Selected:{{SelectedValueis}}</span>
+          <br />
+
+
+          <!-- 多选列表，绑定到一个数组 -->
+           <select v-model="xuanzhongzhi" multiple style="width: 50px">
+              <option>A</option>
+              <option>B</option>
+              <option>C</option>
+            </select>
+            <br>
+          <span>xuanzhongzhi:{{xuanzhongzhi}}</span>
+            <br />
+          <!-- 动态渲染，用for -->
+          <select v-model='forSelected'>
+            <option v-for='option in options' v-bind:value='option.value'>
+              {{option.text}}
+            </option>
+          </select>
+          <span>Select:{{forSelected}}</span>
+          <br />
+          <!-- 绑定value -->
+          <!-- 对于单选按钮，勾选框及选择列表选项， v-model 绑定的 value 通常是静态字符串（对于勾选框是逻辑值）：
+          当选中时，`pickedA` 为字符串 "a -->
+          <input type="radio" v-model='pickedA' value="a" />
+          <span>{{pickedA}}</span>
+
+          <!-- `toggle` 为 true 或 false -->
+        <input type="checkbox" v-model="toggle">
+        <span>toggle:{{toggle}}</span>
+        <br />
+
+        <!-- 当选中时，`sele` 为字符串 "abc" -->
+        <select v-model="sele">
+          <option value="abc">ABC</option>
+        </select>
+        <span>sele:{{sele}}</span>
+      </div>
+
+      <!-- 但是有时我们想绑定 value 到 Vue 实例的一个动态属性上，这时可以用 v-bind  实现，并且这个属性的值可以不是字符串。 -->
+    <!-- 复选框 -->
+    <div id="app2">
+    <span>控制台调试</span>
+      <input type="checkbox"
+          v-model='toggle'
+          v-bind:true-value='a'
+          v-bind:false-value='b'
+      />
+
+
+      <select v-model="selected">
+          <!-- 内联对象字面量 -->
+        <option v-bind:value="{ number: 123 }">123</option>
+      </select>
+
+      <!-- 修饰符 -->
+      <input v-model.lazy='msg' />
+        <span>{{msg}}</span>
+
+      <!-- number -->
+      <input v-model.number='age' type='number'/>
+      <span>{{age}}</span>
+
+      <!-- trim 自动过滤收尾空格-->
+      <input v-model.trim='trimMessage' />
+      <br />
+      <span>开始</span>
+      <span>{{trimMessage}}</span>
+      <span>结束</span>
+
+    </div>
+
+      <script>
+        var vm2 = new Vue({
+          el:"#app2",
+          data:{
+              toggle:'',
+              selected:'',
+              msg:'haha',
+              age:29,
+              type:'',
+              trimMessage:''
+          },
+          watch:{
+            age:function (age) {
+              return typeOf(age)
+            }
+          }
+        })
+        var vm1 = new Vue({
+          el:'#app1',
+          data:{
+              message:"初始值",
+              checked:true,
+              cheackNames:[],
+              picked:'',
+              SelectedValueis:'',
+              xuanzhongzhi:[],
+              forSelected:'A',
+              options:[
+                {text:'One',value:'A'},
+                {text:'Two',value:'B'},
+                {text:'Three',value:'C'},
+              ],
+              pickedA:'',
+              toggle:true,
+              sele:''
+          }
+        })
+
+
+      </script>
+
+    </body>
+</html>
