@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <link rel="stylesheet" href="../../css/common.css" />
+        <script src="../../js/vue.js"></script>
+    </head>
+    <body>
+      <div id="example">
+          <my-component></my-component>
+      </div>
+          <br />
+          <br />
+          <br />
+          <br />
+      <div id="app1">
+          <span>全局的可以用在app1里面</span>
+          <my-component></my-component>
+          <span>局部的也可以用在app1里面</span>
+          <my-child></my-child>
+      </div>
+
+      <div id="example-2">
+      <!-- 这三个组件公用了一个data -->
+          <simple-counter2></simple-counter2>
+          <simple-counter2></simple-counter2>
+          <simple-counter2></simple-counter2>
+          <simple-counter2></simple-counter2>
+      </div>
+
+    <div id="example-3">
+      <!-- 我们可以通过为每个组件返回全新的 data 对象来解决这个问题 -->
+          <simple-counter3></simple-counter3>
+          <simple-counter3></simple-counter3>
+          <simple-counter3></simple-counter3>
+          <simple-counter3></simple-counter3>
+      </div>
+
+
+
+
+      <script>
+          // data必须是函数。这个是不对的，这三个组件公用了一个data
+          var data2 = {counter2:0};
+          Vue.component('simple-counter2',{
+            template:'<button v-on:click="counter2 += 1">{{counter2}}</button>',
+            data:function () {
+              return data2;
+            }
+          });
+            new Vue({
+            el:'#example-2'
+          })
+
+            // 我们可以通过为每个组件返回全新的 data 对象来解决这个问题
+          Vue.component('simple-counter3',{
+            template:'<button v-on:click="counter3 += 1">{{counter3}}</button>',
+            data:function () {
+              return {
+                counter3:0
+              }
+            }
+          });
+            new Vue({
+            el:'#example-3'
+          })
+
+
+          // 注册一个全局组件(要在创建跟实例之前注册组件)
+          // 组件名称不能大写,否则报错
+         Vue.component('my-component',{
+             template: '<div>A custom component!</div>'
+         })
+
+         // 创建根实例
+          new Vue({
+          el:"#example"
+         })
+
+
+
+          // 局部注册.组件仅在另一个实例/组件的作用域中可用：
+          // 局部的也就是说，在哪个实例里面注册了，就只能在那个实例里面用
+          var child = {
+            template : '<div>这是一个局部注册组件</div>'
+          }
+          var vm1 = new Vue({
+            el:"#app1",
+            components:{
+              'my-child':child
+            }
+          })
+
+
+      </script>
+    </body>
+</html>
