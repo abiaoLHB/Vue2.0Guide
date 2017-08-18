@@ -17,7 +17,32 @@
           <br />
           <child-component v-bind:parentmessage='message'></child-component>
         </div>
+
+        <!-- 字面量语法 vs d动态语法 -->
+        <div id="app3">
+            <tody-component todymessage='1'></tody-component>
+            <tody-component v-bind:todymessage='dsfsdf1'></tody-component>
+        </div>
+
       <script>
+          // 注册组件
+          Vue.component('tody-component',{
+              props:['todymessage'],
+              template:'<div>{{todymessage}}</div>'
+          })
+          // 创建根实例
+          new Vue({
+            el:"#app3",
+            data:function(){
+              return {
+
+              }
+            }
+          })
+
+
+
+
           // 注册组件
           Vue.component('my-component',{
              props:['message'],
