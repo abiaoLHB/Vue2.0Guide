@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <script src="../../js/vue.js"></script>
+        <link rel="stylesheet" href="../../css/common.css" />
+    </head>
+    <body >
+
+        <!-- 单项数据流 不应该在子组件内部更改prop-->
+        <!-- 注意在 JavaScript 中对象和数组是引用类型，指向同一个内存空间，如果 prop 是一个对象或数组，在子组件内部改变它会影响父组件的状态。 -->
+        <div id="app1">
+            <danxiang childvalue="childValue     "></danxiang>
+        </div>
+
+      <!-- props验证 -->
+      <div id="app2">
+        <yanzheng propA="13213"></yanzheng>
+      </div>
+
+      <!-- 非prop属性 -->
+      <div id="app3">
+        <fei zidingyishuxing='true' value='luo'></fei>
+      </div>
+
+      <script>
+      Vue.component('fei',{
+        props:['value'],
+        template:'<div>{{value}}</div>'
+      });
+      new Vue({
+        el:"#app3"
+      })
+
+
+      // 注册组件
+      Vue.component('yanzheng',{
+        // 需要用对象的形式，而不能用字符串数组：
+        props:{
+          propA:Number,
+          propB:[String,Number],
+          // propC:{
+          //   type:String,
+          //   required:true
+          // },
+          // 数字，有默认值
+          propD:{
+            type:Number,
+            default:100
+          },
+          // propE:{
+          //   type:Object,
+          //   default:function(){
+          //     return (message:'hello');
+          //   }
+          // },
+          // 自定义校验函数
+          propF:{
+            validator:function(value){
+              return value > 10
+            }
+          }
+        },
+        template:'<div>{{propA}}</div>'
+      })
+
+      // 创建跟实例
+      new Vue({
+        el:'#app2',
+        data:function(){
+          return{
+
+          }
+        }
+      })
+
+
+          // 注册组件
+          Vue.component('danxiang',{
+            props:['childvalue'],
+            template:'<div>{{childvalue}}</div>',
+            data:function(){
+              return{
+                counter:this.childvalue
+              }
+            },
+            computed:{
+                norluo:function(){
+                  return this.childvalue.trim()
+                }
+            },
+            created(){
+              console.log(this.counter+'-created')
+              console.log(this.childvalue+'-created')
+            },
+            mounted(){
+              console.log(this.counter+'-mounted')
+              console.log(this.childvalue+'-mounted')
+              console.log('计算属性')
+              console.log(this.norluo)
+            }
+          })
+          new Vue({
+            el:'#app1',
+            data:function(){
+              return{
+
+              }
+            }
+
+          })
+
+      </script>
+    </body>
+</html>
