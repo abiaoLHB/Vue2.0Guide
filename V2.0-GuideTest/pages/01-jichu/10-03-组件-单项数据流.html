@@ -23,7 +23,20 @@
         <fei zidingyishuxing='true' value='luo'></fei>
       </div>
 
+
+      <div id="app4">
+
+      </div>
+
+
       <script>
+
+      Vue.component('my-compontent',{
+          this.props:[]
+          template:'<div></div>'
+      })
+
+
       Vue.component('fei',{
         props:['value'],
         template:'<div>{{value}}</div>'
