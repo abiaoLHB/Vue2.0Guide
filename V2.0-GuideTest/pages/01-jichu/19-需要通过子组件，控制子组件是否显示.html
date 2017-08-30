@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <script src="../../js/vue.js"></script>
+        <link rel="stylesheet" href="../../css/common.css" />
+    </head>
+    <body >
+ <!--
+    点击子组件会让子组件消失；
+    点击父组件的按钮，通过更改子组件的tohidden属性，让子组件重新显示。
+    子组件的指令绑定在子组件的模板之中（如此才能调用）
+  -->
+   <div id="app">
+      <button @click="toshow">点击让子组件显示</button>
+      <children ref='pp'>
+        <span slot="first">【12345】</span>
+      </children>
+  </div>
+
+<script>
+
+var vm = new Vue({
+  el:'#app',
+  components:{
+    children:{ //这个无返回值，不会继续派发
+      template:"<div v-if='tohidden' @click='tohide'>这里是子组件</div>",
+    data:function() {
+      return{
+        tohidden:true
+      }
+    },
+    methods:{
+        tohide:function() {
+          console.log('不会走这里')
+          this.tohidden = !this.tohidden;
+          }
+        }
+    }
+  },
+  methods:{
+     toshow:function(){
+
+        // 获取所有叫children的组件
+        // this.$children[0].tohidden = true;
+
+        // 另一种写法ref 给组件加一个ref='某某'属性
+        this.$refs.pp.tohidden = true;
+
+     }
+    }
+  });
+
+</script>
+    </body>
+</html>
