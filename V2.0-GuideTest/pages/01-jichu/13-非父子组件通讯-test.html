@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <script src="../../js/vue.js"></script>
+        <link rel="stylesheet" href="../../css/common.css" />
+    </head>
+    <body >
+      <!-- 有时候两个组件也需要通信 (非父子关系)。在简单的场景下，
+      可以使用一个空的 Vue 实例作为中央事件总线： -->
+      <!-- 在复杂的情况下，我们应该考虑使用专门的状态管理模式. -->
+      <!-- 上下分别是 foo组件和 bar 组件，它们之间是非父子关系，分别点击各自的 button ，另一个组件的 count 对应增加。 -->
+      <!-- 案例二 -->
+    <div id='app2'>
+      <upcompont></upcompont>
+      点下面我的值变
+      <hr />
+      <downcompont></downcompont>
+      点上面我的值变
+    </div>
+      <script>
+
+        //案例二
+        //注册空的vue实例做中转
+        //
+        var bus = new Vue({})
+
+        var upcompont = {
+          template:'<button v-on:click="addUpCounter">{{upcounter}}</button>',
+          data:function(){
+            return{
+              upcounter:0
+            }
+          },
+          methods:{
+              addUpCounter:function(){
+                // 触发事件
+                bus.$emit('up')
+              }
+          },
+          mounted:function(){
+              // 绑定this的写法
+              // bus.$on('down',function(){
+              //   this.upcounter += 1;
+              // }.bind(this))
+
+              // 箭头函数写法。不用绑定this
+              // 函数体内的this对象，就是定义时所在的对象，而不是使用时所在的对象
+               bus.$on('down',()=>{
+                this.upcounter+=10
+              })
+          }
+        }
+
+        var downcompont = {
+          template:'<button v-on:click="addDownCounter">{{downcounter}}</button>',
+          data:function(){
+            return{
+              downcounter:0
+            }
+          },
+          methods:{
+            addDownCounter:function(){
+              bus.$emit('down')
+            }
+          },
+          mounted:function(){
+              bus.$on('up',function(){
+                  this.downcounter += 1
+              }.bind(this))
+          }
+        }
+       new Vue({
+          el:"#app2",
+          components:{
+            upcompont,
+            downcompont
+          }
+        })
+
+      </script>
+    </body>
+</html>
