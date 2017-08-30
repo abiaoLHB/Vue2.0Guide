@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <script src="../../js/vue.js"></script>
+        <link rel="stylesheet" href="../../css/common.css" />
+    </head>
+    <body >
+    <!-- 被分发的内容的作用域，根据其所在模板决定，例如，以上标签，其在父组件的模板中（虽然其被子组件的children标签所包括，但由于他不在子组件的template属性中，因此不属于子组件），则受父组件所控制-->
+
+    <!-- 当点击文字12345的区域时（而不是按钮全部），会触发父组件的tobeknow方法。但是点击其他区域时则没有影响。官方教程是这么说的：
+    父组件模板的内容在父组件作用域内编译；子组件模板的内容在子组件作用域内编译 -->
+
+
+<div id="app">
+  <children>
+    <span slot="first" @click="tobeknow">12345</span>
+    <span slot="second">56789</span>
+  </children>
+</div>
+
+<script>
+  var vm = new Vue({
+   el:'#app',
+   methods:{
+      tobeknow:function() {
+        alert("It is the parent's method");
+      }
+    },
+  components:{
+    children:{ //这个无返回值，不会继续派发
+     template:"<button><slot name='first'></slot>为了明确作用范围，<slot name='second'></slot>所以使用button标签</button>"
+    }
+  }
+  });
+</script>
+    </body>
+</html>

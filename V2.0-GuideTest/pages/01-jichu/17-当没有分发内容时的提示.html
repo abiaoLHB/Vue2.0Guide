@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <script src="../../js/vue.js"></script>
+        <link rel="stylesheet" href="../../css/common.css" />
+    </head>
+    <body >
+    <!-- 假如父组件没有在子组件中放置有标签，或者是父组件在子组件中放置标签，但有slot属性，而子组件中没有该slot属性的标签。
+    那么，子组件的slot标签，将不会起到任何作用。除非，该slot标签内有内容，那么在无分发内容的时候，会显示该slot标签内的内容 -->
+<!-- 32元*30袋=1000元子粉 -->
+<!-- 350*10=3500元手工费 -->
+<!-- 700*2=1400 -->
+
+    <div id="app">
+      <children>
+        <span slot="first">【12345】</span>
+        <!-- <span slot="last">【1防守打法2345】</span> -->
+      </children>
+    </div>
+
+<script>
+
+var vm = new Vue({
+  el:'#app',
+  components:{
+    // 【1】name='first'的slot标签被父组件对应的标签所替换（slot标签内部的内容被舍弃）；
+    // 【2】name='last'的slot标签，因为没有对应的内容，则显示该slot标签内部的内容
+  children:{ //这个无返回值，不会继续派发
+      template:"<div><slot name='first'><button>【如果没有内容则显示我1】</button></slot>为了明确作用范围，<slot name='last'><button>【如果没有内容则显示我2】</button></slot>所以使用button标签</div>"
+    }
+  }
+});
+
+</script>
+    </body>
+</html>
