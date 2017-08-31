@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <script src="../../js/vue.js"></script>
+        <link rel="stylesheet" href="../../css/common.css" />
+    </head>
+    <body >
+        <div id="app">
+          <child>
+              <!-- props只是个临时变量，可随意起名字 -->
+            <!--   <template scope='props'>
+                  <span>hello from parent</span>
+                  <br />
+                  <span>{{props.text}}</span>
+                  <br />
+                  <span>{{props.title}}</span>
+              </template> -->
+
+              <template scope='abc'>
+                  <span>hello from parent</span>
+                  <br />
+                  <span>{{abc.text}}</span>
+                  <br />
+                  <span>{{abc.title}}</span>
+              </template>
+          </child>
+        </div>
+
+    <script>
+      var vm = new Vue({
+        el:'#app',
+        data:function () {
+          return{
+
+          }
+        },
+        components:{
+          child:{
+            template:'<div class="child"> <slot text="hello from child" title="hello from little"></slot> </div>'
+          }
+        }
+      })
+    </script>
+
+    </body>
+</html>
