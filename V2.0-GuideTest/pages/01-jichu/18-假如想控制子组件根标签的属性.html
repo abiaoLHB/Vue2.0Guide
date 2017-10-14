@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <script src="../../js/vue.js"></script>
+        <link rel="stylesheet" href="../../css/common.css" />
+    </head>
+    <body >
+    <!-- 【1】首先，由于模板标签是属于父组件的，因此，将子组件的指令绑定在模板标签里，是不可以的（因为他归属于父组件）；
+    【2】假如需要通过父组件控制子组件是否显示（例如v-if或者v-show），那么这个指令显然是属于父组件的（例如放在父组件的data下面）。可以将标签写在子组件的模板上。
+    通过父组件（点击按钮，切换v-if指令的值）控制子组件是否显示 -->
+
+
+      <div id="app">
+        <button @click="toshow">点击让子组件显示</button>
+        <children v-if="abc"></children>
+     </div>
+
+<script>
+
+  var vm = new Vue({
+  el:'#app',
+  data:{
+    abc:false
+  },
+  methods:{
+    toshow:function() {
+      this.abc = !this.abc;
+    }
+  },
+  components:{
+    children:{ //这个无返回值，不会继续派发
+      template:
+        "<div>这里是子组件</div>"
+   }
+}
+
+});
+
+</script>
+    </body>
+</html>

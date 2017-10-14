@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <script src="../../js/vue.js"></script>
+        <link rel="stylesheet" href="../../css/common.css" />
+    </head>
+    <body >
+    <div id="app1">
+    <!-- 尽管在 Vue 中渲染 HTML 很快，不过当组件中包含大量静态内容时，可以考虑使用 v-once
+    将渲染结果缓存起来，就像这样： -->
+      <terms-of-service></terms-of-service>
+    </div>
+
+
+    <script>
+      Vue.component('terms-of-service', {
+        template: '\
+          <div v-once>\
+            <h1>Terms of Service</h1>\
+            ... a lot of static content ...\
+          </div>\
+        '
+      })
+      new Vue({
+        el:"#app1"
+      })
+    </script>
+
+    </body>
+</html>

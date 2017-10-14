@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <script src="../../js/vue.js"></script>
+        <link rel="stylesheet" href="../../css/common.css" />
+    </head>
+    <body >
+
+    <div id="counter-event-example">
+      <p>{{ total }}</p>
+      <button-counter v-on:increment="incrementTotal"></button-counter>
+      <button-counter v-on:increment="incrementTotal"></button-counter>
+    </div>
+    <p>----------</p>
+    <div id="app1">
+        <p>{{counter}}</p>
+        <mycounter v-on:waiclick='waibujia'></mycounter>
+        <mycounter v-on:waiclick='waibujia'></mycounter>
+    </div>
+    <p>----------</p>
+  <div id="app2">
+    <p>{{outCounter}}</p>
+    <commoncounter v-on:chufa='waibujia'></commoncounter>
+    <commoncounter v-on:chufa='waibujia'></commoncounter>
+    <commoncounter v-on:chufa='waibujia'></commoncounter>
+    <commoncounter v-on:chufa='waibujia'></commoncounter>
+    <commoncounter v-on:chufa='waibujia'></commoncounter>
+    <commoncounter v-on:chufa='waibujia'></commoncounter>
+  </div>
+
+  <!-- 给组件绑定原声事件 -->
+  <div id="app3">
+    <nativecompent v-on:click.native='yuansheng'></nativecompent>
+  </div>
+
+
+<p>------------------</p>
+<p>使用自定义事件的表单输入组件</p>
+
+<div id="app">
+  <currency-input label="Price" v-model="price"></currency-input>
+  <currency-input label="Shipping" v-model="shipping"></currency-input>
+  <currency-input label="Handling" v-model="handling"></currency-input>
+  <currency-input label="Discount" v-model="discount"></currency-input>
+  <p>Total: ${{ total }}</p>
+</div>
+
+
+<!-- 定制组件的v-model -->
+<div id="app4">
+  <my-checkbox v-model="foo" value="some value"></my-checkbox>
+</div>
+
+
+<script src="https://unpkg.com/vue/dist/vue.js"></script>
+<script src="../../js/currency-validator.js"></script>
+
+
+      <script>
+        // 使用$on监听事件
+        // 使用$emit触发事件
+        // 父组件可以在使用子组件的地方直接用 v-on 来监听子组件触发的事件
+        Vue.component('button-counter', {
+          // 不能用 $on 侦听子组件释放的事件，而必须在模板里直接用 v-on 绑定
+          // 也就是说组件内部自己的事件监听要写在组件里
+          template: '<button v-on:click="incrementCounter">{{ counter }}</button>',
+          data: function () {
+            return {
+              counter: 0
+            }
+          },
+          methods: {
+            incrementCounter: function () {
+              this.counter += 1
+              // 触发increment对应的事件
+              this.$emit('increment')
+            }
+          },
+        })
+        new Vue({
+          el: '#counter-event-example',
+          data: {
+            total: 0
+          },
+          methods: {
+            incrementTotal: function () {
+              this.total += 1
+            }
+          }
+        })
+
+
+        // 自定义一个组件
+        Vue.component('mycounter',{
+          template:'<button v-on:click="add">{{inCounter}}</button>',
+          data:function(){
+            return{
+              inCounter:0
+            }
+          },
+          methods:{
+            add:function(){
+              this.inCounter += 1;
+              // 触发外部事件
+              this.$emit('waiclick');
+            }
+          }
+        })
+        //初始化跟实例
+        new Vue({
+          el:'#app1',
+          data:function(){
+            return{
+              counter:0
+            }
+          },
+          methods:{
+            waibujia:function(){
+              this.counter += 1;
+            }
+          }
+        })
+
+        Vue.component('commoncounter',{
+          template:'<button v-on:click="neibujia">{{inCounter}}</button>',
+          data:function(){
+            return{
+              inCounter:0
+            }
+          },
+          methods:{
+            neibujia:function(){
+              this.inCounter += 1;
+              this.$emit('chufa')
+            }
+          }
+
+        })
+
+        new Vue({
+          el:"#app2",
+          data:function(){
+            return{
+              outCounter:0
+            }
+          },
+          methods:{
+            waibujia:function(){
+              this.outCounter += 1;
+            }
+          }
+        })
+
+
+        Vue.component('nativecompent',{
+          template:'<button >原生</button>',
+          data:function(){
+            return{
+
+            }
+          }
+        })
+        new Vue({
+          el:'#app3',
+          data:function(){
+            return{
+            }
+          },
+          methods:{
+            yuansheng:function(){
+              console.log('yuansheng fang fa')
+            }
+          }
+        })
+
+    Vue.component('currency-input', {
+      template: '\
+        <div>\
+          <label v-if="label">{{ label }}</label>\
+          $\
+          <input\
+            ref="input"\
+            v-bind:value="value"\
+            v-on:input="updateValue($event.target.value)"\
+            v-on:focus="selectAll"\
+            v-on:blur="formatValue"\
+          >\
+        </div>\
+      ',
+      props: {
+        value: {
+          type: Number,
+          default: 0
+        },
+        label: {
+          type: String,
+          default: ''
+        }
+      },
+      mounted: function () {
+        this.formatValue()
+      },
+      methods: {
+        updateValue: function (value) {
+          var result = currencyValidator.parse(value, this.value)
+          if (result.warning) {
+            this.$refs.input.value = result.value
+          }
+          this.$emit('input', result.value)
+        },
+        formatValue: function () {
+          this.$refs.input.value = currencyValidator.format(this.value)
+        },
+        selectAll: function (event) {
+          setTimeout(function () {
+            event.target.select()
+          }, 0)
+        }
+      }
+    })
+
+    new Vue({
+      el: '#app',
+      data: {
+        price: 0,
+        shipping: 0,
+        handling: 0,
+        discount: 0
+      },
+      computed: {
+        total: function () {
+          return ((
+            this.price * 100 +
+            this.shipping * 100 +
+            this.handling * 100 -
+            this.discount * 100
+          ) / 100).toFixed(2)
+        }
+      }
+    })
+
+
+
+Vue.component('my-checkbox', {
+  model: {
+    prop: 'checked',
+    event: 'change'
+  },
+  props: {
+    checked: Boolean,
+    // this allows using the `value` prop for a different purpose
+    value: String
+  },
+  // ...
+})
+
+new Vue({
+  el:"#app4",
+  data:function(){
+    return{
+
+    }
+  }
+})
+
+      </script>
+    </body>
+</html>

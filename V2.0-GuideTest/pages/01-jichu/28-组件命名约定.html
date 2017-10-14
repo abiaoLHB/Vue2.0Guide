@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <script src="../../js/vue.js"></script>
+        <link rel="stylesheet" href="../../css/common.css" />
+    </head>
+    <body >
+    <div id="app1">
+        <!-- 在 HTML 模板中，请使用 kebab-case 形式： -->
+        <!-- 在HTML模板中始终使用 kebab-case -->
+        <kebab-cased-component></kebab-cased-component>
+        <camel-cased-component></camel-cased-component>
+        <pascal-cased-component></pascal-cased-component>
+    </div>
+
+
+    <script>
+    // 当注册组件 (或者 props) 时，可以使用 kebab-case，camelCase，或 PascalCase。
+    // 在组件定义中
+    components: {
+      // 使用 kebab-case 形式注册
+      'kebab-cased-component': { /* ... */ },
+      // register using camelCase
+      'camelCasedComponent': { /* ... */ },
+      // register using PascalCase
+      'PascalCasedComponent': { /* ... */ }
+    }
+    </script>
+
+    </body>
+</html>

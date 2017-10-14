@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <script src="../../js/vue.js"></script>
+        <link rel="stylesheet" href="../../css/common.css" />
+    </head>
+    <body >
+    <div id="app1">
+        <async-example></async-example>
+    </div>
+
+
+    <script>
+    //Vue.js 允许将组件定义为一个工厂函数，动态地解析组件的定义
+    // Vue.js 只在组件需要渲染时触发工厂函数，并且把结果缓存起来，用于后面的再次渲染
+    // 也可以调用 reject(reason) 指示加载失败。这里 setTimeout 只是为了演示。怎么获取组件完全由你决定
+    Vue.component('async-example',function (resolve,reject) {
+        // 这个组件3秒钟后才显示出来
+        setTimeout(function(){
+            resolve({
+                template:'<div>i m async</div>'
+            })
+        }, 3000);
+    })
+    new Vue({
+        el:"#app1",
+        data:function(){
+            return{
+
+            }
+        }
+    })
+    </script>
+
+    </body>
+</html>

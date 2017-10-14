@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <script src="../../js/vue.js"></script>
+        <link rel="stylesheet" href="../../css/common.css" />
+    </head>
+    <body >
+    <!-- 简单来说动态组件：就是几个组件放在一个挂载点下，然后根据父组件的某个变量来决定显示哪个，或者都不显示。 -->
+    <!-- 动态切换：在挂载点使用component标签，然后使用v-bind:is=”组件名”，会自动去找匹配的组件名，如果没有，
+      则不显示；改变挂载的组件，只需要修改is指令的值即可。 -->
+
+    <div id="app">
+        <button @click="toshow">点击让子组件显示</button>
+        <component v-bind:is="which_to_show"></component>
+    </div>
+
+    <div id="app2">
+      <button>显示的是第{{componentis}}个组件</button>
+      <component v-bind:is='componentis'></component>
+    </div>
+    <script>
+        var vm = new Vue({
+            el: '#app',
+            data: {
+                which_to_show: "first"
+            },
+            methods: {
+                toshow: function () {   //切换组件显示
+                    var arr = ["first", "second", "third", ""];
+                    var index = arr.indexOf(this.which_to_show);
+                    if (index < 3) {
+                        this.which_to_show = arr[index + 1];
+                    } else {
+                        this.which_to_show = arr[0];
+                    }
+                }
+            },
+            components: {
+                first: { //第一个子组件
+                    template: "<div>这里是子组件1</div>"
+                },
+                second: { //第二个子组件
+                    template: "<div>这里是子组件2</div>"
+                },
+                third: { //第三个子组件
+                    template: "<div>这里是子组件3</div>"
+                },
+            }
+        });
+
+
+        var vm2 = new Vue({
+          el:"#app2",
+          data:function(){
+            return{
+               componentis:'third'
+            }
+          },
+          components:{
+            first:{
+              template:'<div>第一个组件</div>'
+            },
+            second:{
+              template:'<div>第二个组件</div>'
+            },
+            third:{
+              template:'<div>第三个组件</div>'
+            }
+          }
+        })
+
+
+
+    </script>
+
+    </body>
+</html>

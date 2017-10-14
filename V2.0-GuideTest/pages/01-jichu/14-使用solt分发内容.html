@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <script src="../../js/vue.js"></script>
+        <link rel="stylesheet" href="../../css/common.css" />
+    </head>
+    <body >
+      <!-- 编译作用域 -->
+      <div id="app1">
+        <!-- 这样使用v-show="someChildProperty 需要在父组件绑定 -->
+        <child-component v-show="someChildProperty">
+           {{message}}
+        </child-component>
+
+         <!-- 这样使用需要在子组件内部绑定 -->
+         <child-component>
+           {{message}}
+        </child-component>
+      </div>
+      <!-- 博客地址：http://blog.csdn.net/qq_24122593/article/details/52921030 -->
+
+      <!-- solt插槽 简单来说，假如父组件需要在子组件内放一些DOM，那么这些DOM是显示、不显示、在哪个地方显示、如何显示，就是slot分发负责的活。-->
+      <!--默认情况下 父组件在子组件内套的内容，是不显示的 -->
+      <div id="app2">
+          <children>
+              <!--下面这行span不会显示-->
+              <span>12345</span>
+          </children>
+      </div>
+
+      <!-- 单个solt -->
+      <div id="app3">
+          <children>
+              <!-- 子组件加了solt，就显示为：12345 67890 为了明确作用范围，所以使用button标签 -->
+              <!-- 即父组件放在子组件里的内容，插到了子组件的<slot></slot>位置； -->
+              <!-- 注意，即使有多个标签，会一起被插入，相当于用父组件放在子组件里的标签，替换了<slot></slot>这个标签。 -->
+              <span>12345</span>
+              <span>67890</span>
+          </children>
+      </div>
+
+      <script>
+      // 父组件模板的内容在父组件作用域内编译；子组件模板的内容在子组件作用域内编译
+       Vue.component('child-component', {
+          // 有效，因为是在正确的作用域内
+          template: '<div v-show="someChildProperty">Child</div>',
+          data: function () {
+            return {
+              someChildProperty: true
+            }
+          }
+        })
+       new Vue({
+          el:"#app1",
+          data:function(){
+            return{
+              someChildProperty:true,
+              message:'message应该绑定到父组件'
+            }
+          }
+       })
+
+
+      // 类似地，分发内容是在父作用域内编译。
+      var vm2 = new Vue({
+        el: '#app2',
+        components:{
+          children:{ //这个无返回值，不会继续派发
+            // 不加solt
+            template:"<button>为了明确作用范围，所以使用button标签</button>"
+          }
+        }
+      });
+
+     var vm3 = new Vue({
+        el: '#app3',
+        components:{
+          children:{ //这个无返回值，不会继续派发
+            // 加了solt
+            template:"<button><slot></slot>为了明确作用范围，所以使用button标签</button>"
+          }
+        }
+      });
+
+      </script>
+    </body>
+</html>

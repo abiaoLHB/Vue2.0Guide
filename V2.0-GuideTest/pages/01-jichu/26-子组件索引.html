@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <script src="../../js/vue.js"></script>
+        <link rel="stylesheet" href="../../css/common.css" />
+    </head>
+    <body >
+    <div id="app1">
+    <!-- 当 ref 和 v-for 一起使用时，ref 是一个数组，包含相应的子组件。 -->
+        <userprofile ref='profile'></userprofile>
+    </div>
+
+
+    <script>
+    Vue.component('userprofile',{
+        template:"<div>{{message}}</div>",
+        data:function(){
+           return{
+             message:'hah'
+           }
+        }
+
+    })
+
+
+    var parent = new Vue({
+        el:"#app1",
+        data:function () {
+            return{
+
+            }
+        }
+    })
+
+// $refs只在组件渲染完成后才填充，并且它是非响应式的。它仅仅作为一个直接访问子组件
+// 的应急方案——应当避免在模板或计算属性中使用 $refs
+    var child = parent.$refs.profile;
+    console.log('child----------')
+    console.log(child)
+    console.log('child----------')
+
+    </script>
+
+    </body>
+</html>
