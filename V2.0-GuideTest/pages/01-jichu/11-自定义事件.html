@@ -7,7 +7,49 @@
     </head>
     <body >
 
+		<div id="counter-event-example">
+		  <p>{{ total }}</p>
+		  <button-counter v-on:increment="incrementTotal"></button-counter>
+		  <button-counter v-on:increment="incrementTotal"></button-counter>
+		  <!-- 绑定原生事件 -->
+		  <button-counter v-on:click.native='dosomething'></button-counter>
+
+		</div>
+
+
       <script>
+      	// 注册组件
+      	Vue.component('button-counter', {
+		  template: '<button v-on:click="incrementCounter">{{ counter }}</button>',
+		  data: function () {
+		    return {
+		      counter: 0
+		    }
+		  },
+		  methods: {
+		    incrementCounter: function () {
+		      this.counter += 1
+		      this.$emit('increment')
+		    }
+		  },
+		})
+		new Vue({
+		  el: '#counter-event-example',
+		  data: {
+		    total: 0
+		  },
+		  methods: {
+		    incrementTotal: function () {
+		    	// alert('i组件外ncrementTotal')
+		      this.total += 1
+		    },
+		    // 这个方法要写在实例里，不能写在组建内
+		    dosomething:function(){
+		    	console.log('绑定原生事件')
+		    }
+		  }
+		})
+
 
       </script>
     </body>
