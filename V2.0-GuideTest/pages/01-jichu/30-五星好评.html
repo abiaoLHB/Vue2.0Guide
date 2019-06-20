@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>介绍</title>
+    <link rel="stylesheet" href="../../css/common.css" />
+    <script src="../../js/vue.js"></script>
+    <style>
+        #box .on {
+            background: url('../../images/color_start.png') no-repeat;
+        }
+
+        #box div {
+            width: 56px;
+            height: 59px;
+            float: left;
+            background: url('../../images/dark_start.png') no-repeat;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- 写在app里面可以 -->
+    <div id="app">
+        <div id="box">
+            <div v-for="n in 5" @mouseenter="enter(n)" @mouseleave="leave()" @click="Selected(n)" :class="{'on':cur>=n}"></div>
+        </div>
+    </div>
+
+    <script>
+        var app = new Vue({
+            el: "#app",
+            data: {
+                cur: -1,
+                flag: false //鼠标点击后变成true，鼠标进入进出事件就不会改变背景图
+            },
+            methods: {
+                enter(idx) {
+                    console.log('enter'+idx);
+                    if (!this.flag) {
+                        this.cur = idx;
+                    }
+                    console.log('this.enter'+idx);
+                },
+                leave() {
+                    console.log('leave'+this.cur);
+                    if (!this.flag) {
+                        this.cur = -1;
+                    }
+                    console.log('this.leaveCur'+this.cur);
+                },
+                Selected(n) {
+                    this.flag = true;
+                    this.cur = n;
+                }
+            }
+        })
+    </script>
+</body>
+
+</html>
